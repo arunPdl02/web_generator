@@ -1,6 +1,6 @@
 import unittest
 
-from inline_markdown import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link
+from inline_markdown import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link, text_to_textnodes
 from textnode import TextNode, TextType
 
 class TestInlineMarkDown(unittest.TestCase):
@@ -95,11 +95,6 @@ class TestImageExtractFromMarkdown(unittest.TestCase):
             ]
         )
 
-    def test_markdown_links(self):
-        test = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
-        with self.assertRaises(ValueError):
-            extract_markdown_images(test)
-
     def test_markdown_images_at_begining(self):
         test = "![rick roll](https://i.imgur.com/aKaOqIh.gif) ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
         self.assertListEqual(extract_markdown_images(test),
@@ -119,10 +114,6 @@ class TestLinkExtractionFromMarkdown(unittest.TestCase):
             ]
         )
 
-    def test_markdown_images(self):
-        test = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
-        with self.assertRaises(ValueError):
-            extract_markdown_links(test)
 
     def test_markdown_link_at_begining(self):
         test = "[rick roll](https://i.imgur.com/aKaOqIh.gif) [obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
@@ -182,7 +173,7 @@ class TestImageMarkdown(unittest.TestCase):
 
     def test_same_img_twice(self):
         node = TextNode(
-            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![image](https://i.imgur.com/zjjcJKZ.png)",
+            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![image](https://i.imgur.com/zjjcJKZ.png) this is extra stuff [cow](https://i.imgur.com/3elNhQu.png)",
             TextType.TEXT,
         )
         new_nodes = split_nodes_image([node])
@@ -192,6 +183,7 @@ class TestImageMarkdown(unittest.TestCase):
                 TextNode("image", TextType.IMAGE, "https://i.imgur.com/zjjcJKZ.png"),
                 TextNode(" and another ", TextType.TEXT),
                 TextNode("image", TextType.IMAGE, "https://i.imgur.com/zjjcJKZ.png"),
+                TextNode(" this is extra stuff [cow](https://i.imgur.com/3elNhQu.png)", TextType.TEXT)
             ],
             new_nodes,
         )
@@ -200,7 +192,7 @@ class TestLinkMarkdown(unittest.TestCase):
 
     def test_split_link(self):
         node = TextNode(
-            "This is text with an [parrot](https://i.imgur.com/zjjcJKZ.png) and another [cow](https://i.imgur.com/3elNhQu.png)",
+            "This is text with an [parrot](https://i.imgur.com/zjjcJKZ.png) and another [cow](https://i.imgur.com/3elNhQu.png) llllllllllllll",
             TextType.TEXT,
         )
         new_nodes = split_nodes_link([node])
@@ -212,6 +204,7 @@ class TestLinkMarkdown(unittest.TestCase):
                 TextNode(
                     "cow", TextType.LINK, "https://i.imgur.com/3elNhQu.png"
                 ),
+                TextNode(" llllllllllllll", TextType.TEXT)
             ],
             new_nodes,
         )
@@ -256,4 +249,23 @@ class TestLinkMarkdown(unittest.TestCase):
                 TextNode("link", TextType.LINK, "https://i.imgur.com/zjjcJKZ.png"),
             ],
             new_nodes,
+        )
+
+    def test_text_to_textnodes(self):
+        text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+
+        self.assertListEqual(
+            [
+                TextNode("This is ", TextType.TEXT),
+                TextNode("text", TextType.BOLD),
+                TextNode(" with an ", TextType.TEXT),
+                TextNode("italic", TextType.ITALIC),
+                TextNode(" word and a ", TextType.TEXT),
+                TextNode("code block", TextType.CODE),
+                TextNode(" and an ", TextType.TEXT),
+                TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
+                TextNode(" and a ", TextType.TEXT),
+                TextNode("link", TextType.LINK, "https://boot.dev"),
+            ],
+            text_to_textnodes(text)
         )
