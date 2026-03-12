@@ -2,7 +2,7 @@ import os
 import shutil
 
 dir_path_static = "./static"
-dir_path_public = "./static"
+dir_path_public = "./public"
 logger = []
 
 def copy_static_to_public():
@@ -31,3 +31,12 @@ def copy_dir_r(src, dest):
             os.mkdir(dest_file_path)
             logger.append(f"making {dest_file_path} directory")
             copy_dir_r(src_file_path, dest_file_path)
+
+
+def write_file(dest_path, file_content, file_name):
+    output_path = os.path.join(dest_path, file_name)
+    if not os.path.exists(dest_path):
+        os.makedirs(dest_path)
+    
+    with open(output_path, 'w') as f:
+        f.write(file_content)

@@ -1,7 +1,7 @@
 import unittest
 
 from md_to_html import markdown_to_blocks
-from blocknode import block_to_block_type, BlockType, markdown_to_blocks
+from blocknode import block_to_block_type, BlockType, markdown_to_blocks, extract_title
 
 class TestBlockMarkdown(unittest.TestCase):
     def test_markdown_to_blocks(self):
@@ -113,6 +113,15 @@ class TestBlockToBlockType(unittest.TestCase):
     def test_block_to_block_type_invalid_olist(self):
         block = "1. list\n2.items"
         self.assertNotEqual(block_to_block_type(block), BlockType.OLIST)
+
+    def test_extract_title(self):
+        h1 = "# Hello\n this is awesome"
+        self.assertEqual(extract_title(h1),"Hello")
+
+    def test_extract_title_invalid(self):
+        h1 = "Hi, how you doing"
+        with self.assertRaises(Exception):
+            extract_title(h1)
 
 if __name__ == "__main__":
     unittest.main()

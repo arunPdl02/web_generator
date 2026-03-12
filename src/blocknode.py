@@ -53,3 +53,8 @@ def markdown_to_blocks(markdown):
             continue
         filtered_block.append(block.strip())
     return filtered_block
+
+def extract_title(markdown):
+    if markdown[0:2] != "# ":
+        raise Exception("markdown doesn't have a h1 header")
+    return markdown.lstrip("# ").split("\n")[0]
