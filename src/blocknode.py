@@ -55,6 +55,6 @@ def markdown_to_blocks(markdown):
     return filtered_block
 
 def extract_title(markdown):
-    if markdown[0:2] != "# ":
+    if not markdown.startswith("# "):
         raise Exception("markdown doesn't have a h1 header")
     return markdown.lstrip("# ").split("\n")[0]
