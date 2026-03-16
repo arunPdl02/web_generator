@@ -1,17 +1,15 @@
 import os
 import shutil
 
-dir_path_static = "./static"
-dir_path_public = "./public"
 logger = []
 
-def copy_static_to_public():
+def copy_dir(src, dest):
     global logger
-    if os.path.exists(dir_path_public):
-        shutil.rmtree(dir_path_public)
+    if os.path.exists(dest):
+        shutil.rmtree(dest)
         logger.append("removing public directory")
-    os.mkdir(dir_path_public)
-    copy_dir_r(dir_path_static, dir_path_public)
+    os.mkdir(dest)
+    copy_dir_r(src, dest)
 
     # print(logger)
 
