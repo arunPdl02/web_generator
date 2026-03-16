@@ -4,7 +4,7 @@ from blocknode import extract_title
 from util.util import write_file
 
 def generate_page(from_path, template_path, dest_path, basepath):
-    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
+    # print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     template_content = get_file_content(template_path)
 
     md_content = get_file_content(from_path)

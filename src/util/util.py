@@ -11,7 +11,7 @@ def copy_dir(src, dest):
     os.mkdir(dest)
     copy_dir_r(src, dest)
 
-    # print(logger)
+    print(logger)
 
 
 def copy_dir_r(src, dest):

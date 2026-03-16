@@ -1,4 +1,4 @@
-from util.util import copy_dir, write_file
+from util.util import copy_dir
 from page import generate_pages_recursive
 import os, sys
 
@@ -9,9 +9,10 @@ dir_path_public = "./docs"
 
 def main():
     
-    basepath = sys.argv[0] if 0 < len(sys.argv) else "/"
+    basepath = sys.argv[1] if 1 < len(sys.argv) else "/"
 
     copy_dir(dir_path_static, dir_path_public)
+
     if not os.path.exists(markdown_path):
         raise Exception(f"missing index.md in path {markdown_path}")
     
