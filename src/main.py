@@ -1,8 +1,8 @@
 from util.util import copy_static_to_public, write_file
-from page import generate_page
+from page import generate_pages_recursive
 import os
 
-markdown_path = "./content/index.md"
+markdown_path = "./content"
 template_path = "./template.html"
 public_path = "./public"
 
@@ -13,9 +13,8 @@ def main():
     
     if not os.path.exists(template_path):
         raise Exception(f"missing template.html in path {template_path}")
-    html_page = generate_page(markdown_path, template_path, public_path )
 
-    write_file(public_path, html_page, "index.html")
+    generate_pages_recursive(markdown_path,template_path, public_path)
 
 
 if __name__ == "__main__":
