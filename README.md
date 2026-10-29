@@ -1,4 +1,4 @@
-# web_generator
+# Web Generator
 
 A small, dependency-free static site generator written in Python. It converts
 Markdown files in `content/` into HTML pages in `docs/` using a single
